@@ -20,11 +20,11 @@ namespace BlacHole.Editor
         [MenuItem("Tools/BlacHole.io/Auto Setup Project")]
         public static void RunAutoSetup()
         {
-            // ── 1. Assign ScriptableObject configs to GameBootstrap ──────────
-            AssignConfigsToBootstrap();
+            // ── 1. Create default ScriptableObject configs (if missing) ──────
+            ConfigCreator.CreateDefaultConfigs();
 
-            // ── 2. Add scenes to Build Settings ─────────────────────────────
-            RegisterScenes();
+            // ── 2. Build all scenes and register them in Build Settings ──────
+            SceneBuilder.BuildAllScenes();
 
             // ── 3. Save everything ───────────────────────────────────────────
             AssetDatabase.SaveAssets();
