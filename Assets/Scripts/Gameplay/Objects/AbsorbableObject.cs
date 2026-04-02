@@ -27,7 +27,11 @@ namespace BlacHole.Gameplay.Objects
             set => transform.position = new Vector3(value.x, value.y, 0f);
         }
         public float Mass                  => Weight;
-        public float RequiredConsumeRadius => RequiredConsumeRadius_Backing;
+        public float RequiredConsumeRadius
+        {
+            get => RequiredConsumeRadius_Backing;
+            set => RequiredConsumeRadius_Backing = value;
+        }
         public bool  IsBeingPulled
         {
             get => IsBeingPulled_Backing;
