@@ -7,8 +7,8 @@ namespace BlacHole.Gameplay.Collision
     /// <summary>
     /// MonoBehaviour that handles:
     ///   • Map boundary clamping
-    ///   • Player-vs-player bounce (mass diff &lt; 20%) with 0.3s control lock
-    ///   • Player absorption (massA &gt; massB * 1.2)
+    ///   • Player-vs-player bounce (mass diff < 20%) with 0.3s control lock
+    ///   • Player absorption (massA > massB * 1.2)
     ///   • Smooth slide along static objects
     /// </summary>
     public class CollisionResolver : MonoBehaviour

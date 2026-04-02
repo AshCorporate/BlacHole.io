@@ -40,8 +40,8 @@ namespace BlacHole.Gameplay.Absorption
             if (!obj.IsAvailable) return;
 
             float mass  = obj.Mass;
-            float xp    = (obj as AbsorbableObject)?.XPReward   ?? mass * 0.1f;
-            float score = (obj as AbsorbableObject)?.XPReward   ?? mass;
+            float xp    = (obj as AbsorbableObject)?.XPReward ?? mass * 0.1f;
+            float score = mass;
 
             _progression.AddMass(mass);
             _progression.AddXP(xp);

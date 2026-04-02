@@ -12,7 +12,7 @@ namespace BlacHole.Gameplay.MapGeneration
     /// Seeded deterministic map generator.
     /// Spawns ~650 objects across 5 size categories with no overlap.
     /// Uses SpatialHash occupancy map for O(1) overlap validation — no Physics.OverlapCircle loops.
-    /// Must complete in &lt;1 frame.
+    /// Must complete in <1 frame.
     /// </summary>
     public class MapGenerator : MonoBehaviour, IMapGenerator
     {
