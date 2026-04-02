@@ -8,6 +8,8 @@ namespace BlacHole.Core
     /// <summary>
     /// Owns the running game session.
     /// Holds references to all services, starts/stops the game loop, handles pause.
+    /// If services were not pre-registered by GameBootstrap (e.g. when starting Game scene directly),
+    /// this manager bootstraps them itself so the scene always works in isolation.
     /// </summary>
     public class GameSessionManager : MonoBehaviour
     {
@@ -30,6 +32,39 @@ namespace BlacHole.Core
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+
+            EnsureServices();
+        }
+
+        /// <summary>
+        /// Ensure all required services exist in the ServiceLocator.
+        /// If GameBootstrap already ran (via Boot scene), this is a no-op.
+        /// If the Game scene was opened directly (e.g. in editor), we self-bootstrap.
+        /// </summary>
+        private void EnsureServices()
+        {
+            if (!ServiceLocator.TryGet<EventBus>(out _))
+            {
+                var eventBus = new EventBus();
+                ServiceLocator.Register<EventBus>(eventBus);
+                Debug.Log("[GameSessionManager] Self-bootstrapped EventBus (Boot scene was not loaded).");
+            }
+
+            if (!ServiceLocator.TryGet<TickManager>(out _))
+            {
+                var tickManager = gameObject.AddComponent<TickManager>();
+                ServiceLocator.Register<TickManager>(tickManager);
+                Debug.Log("[GameSessionManager] Self-bootstrapped TickManager.");
+            }
+
+            if (!ServiceLocator.TryGet<SceneLoader>(out _))
+            {
+                var sceneLoaderGo = new GameObject("SceneLoader");
+                sceneLoaderGo.transform.SetParent(transform);
+                var sceneLoader = sceneLoaderGo.AddComponent<SceneLoader>();
+                ServiceLocator.Register<SceneLoader>(sceneLoader);
+                Debug.Log("[GameSessionManager] Self-bootstrapped SceneLoader.");
+            }
         }
 
         private void Start()
@@ -81,7 +116,7 @@ namespace BlacHole.Core
         }
     }
 
-    // ── Events ──────────────────────────────────────────────────────────────
+    // ── Events ───────────────────────────────────────────────────────────────
     public readonly struct GamePausedEvent { public readonly bool IsPaused; public GamePausedEvent(bool p) { IsPaused = p; } }
     public readonly struct GameOverEvent   { public readonly int  WinnerId;  public GameOverEvent(int id)   { WinnerId = id; } }
 }
